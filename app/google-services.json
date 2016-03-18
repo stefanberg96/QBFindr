@@ -1,0 +1,75 @@
+{
+  "project_info": {
+    "project_id": "findr-1252",
+    "project_number": "703447844334",
+    "name": "Findr"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:703447844334:android:819349a2f4a236e8",
+        "client_id": "android:dbl.tue.framework",
+        "client_type": 1,
+        "android_client_info": {
+          "package_name": "dbl.tue.framework",
+          "certificate_hash": []
+        }
+      },
+      "oauth_client": [],
+      "api_key": [],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "cloud_messaging_service": {
+          "status": 2,
+          "apns_config": []
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "google_signin_service": {
+          "status": 1
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:703447844334:android:bc4656e0c842700a",
+        "client_id": "android:dbl.tue.testframework",
+        "client_type": 1,
+        "android_client_info": {
+          "package_name": "dbl.tue.testframework",
+          "certificate_hash": []
+        }
+      },
+      "oauth_client": [],
+      "api_key": [],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "cloud_messaging_service": {
+          "status": 2,
+          "apns_config": []
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "google_signin_service": {
+          "status": 1
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "client_info": [],
+  "ARTIFACT_VERSION": "1"
+}
