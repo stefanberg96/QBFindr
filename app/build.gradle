@@ -6,15 +6,17 @@ android {
 
     defaultConfig {
         applicationId "dbl.tue.testframework"
-        minSdkVersion 14
+        minSdkVersion 15
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+
     }
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'),
+                    'proguard-rules.pro'
         }
     }
 
@@ -28,8 +30,9 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:design:23.1.1'
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.google.android.gms:play-services:8.3.0'
+    compile 'com.google.android.gms:play-services-gcm:8.3.0'
+    compile 'com.facebook.android:facebook-android-sdk:4.+'
+    compile 'com.google.code.gson:gson:2.3'
     compile "com.quickblox:quickblox-android-sdk-core:2.5.1@aar"
     compile "com.quickblox:quickblox-android-sdk-location:2.5.1@aar"
     compile "com.quickblox:quickblox-android-sdk-messages:2.5.1@aar"

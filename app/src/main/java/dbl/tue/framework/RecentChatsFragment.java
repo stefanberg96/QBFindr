@@ -19,6 +19,8 @@ public class RecentChatsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         LinearLayout ll= (LinearLayout) inflater.inflate(R.layout.recent_chats_fragment,null);
+
+
         Button button=(Button)ll.findViewById(R.id.button2);
         button.setOnClickListener(new View.OnClickListener() {
             @Override

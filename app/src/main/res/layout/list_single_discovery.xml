@@ -2,25 +2,29 @@
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
-    <TableRow>
+    <TableRow android:layout_height="wrap_content">
         <ImageView
             android:id="@+id/img"
-            android:layout_width="50dp"
-            android:layout_height="50dp"/>
+            android:layout_width="75dp"
+            android:layout_height="75dp"/>
 
         <LinearLayout
             android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
             <TextView
                 android:id="@+id/txt"
                 android:layout_width="wrap_content"
-                android:layout_height="50dp" />
+                android:layout_height="50dp"
+                android:text="Test"
+                android:textSize="20dp" />
             <TextView
                 android:id="@+id/txtlower"
                 android:layout_width="wrap_content"
-                android:layout_height="25dp" />
+                android:layout_height="25dp"
+                android:text="TEST"
+                android:textSize="12dp" />
         </LinearLayout>
 
     </TableRow>

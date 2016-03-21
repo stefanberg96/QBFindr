@@ -11,7 +11,6 @@ import java.io.IOException;
 
 public class RegistrationIntentService extends IntentService {
 
-
     /**
      * Creates an IntentService.  Invoked by your subclass's constructor.
      *
@@ -20,7 +19,7 @@ public class RegistrationIntentService extends IntentService {
     public RegistrationIntentService(String name) {
         super(name);
     }
-    // ...
+
 
     @Override
     public void onHandleIntent(Intent intent) {

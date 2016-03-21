@@ -18,13 +18,19 @@ import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.quickblox.auth.QBAuth;
+import com.quickblox.auth.model.QBSession;
+import com.quickblox.chat.QBChatService;
 import com.quickblox.core.QBEntityCallback;
 import com.quickblox.core.QBSettings;
 import com.quickblox.core.exception.QBResponseException;
 import com.quickblox.location.QBLocations;
 import com.quickblox.location.model.QBEnvironment;
 import com.quickblox.location.model.QBLocation;
+import com.quickblox.users.model.QBUser;
 import com.quickblox.users.model.QBUserWrap;
+
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -46,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
-        helper=new PlayServiceHelper(this);
+        helper = new PlayServiceHelper(this);
         final LocationListener mLocationListener = new LocationListener() {
             @Override
             public void onLocationChanged(final Location location) {
@@ -95,12 +101,10 @@ public class MainActivity extends AppCompatActivity {
             public void onProviderEnabled(String provider) {
 
 
-
             }
 
             @Override
             public void onProviderDisabled(String provider) {
-
 
 
             }
@@ -122,19 +126,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        Criteria criteria=new Criteria();
-        criteria.setAccuracy(Criteria.ACCURACY_MEDIUM);
-        Location loc=mLocationManager.getLastKnownLocation(mLocationManager.getBestProvider(criteria, true));
-        mLocationManager.requestLocationUpdates(mLocationManager.getBestProvider(criteria, true),10000,100f,mLocationListener);
-        if(loc==null){
-            loc=mLocationManager.getLastKnownLocation(mLocationManager.getBestProvider(new Criteria(),false));
-        }
-        double latitude =loc.getLatitude();
+        loc=getLastKnownLocation(mLocationManager);
+        double latitude = loc.getLatitude();
         double longitude = loc.getLongitude();
 
 
         final QBLocation qbLocation = new QBLocation(latitude, longitude);
-        QBUserWrap userWrap=new QBUserWrap();
+        QBUserWrap userWrap = new QBUserWrap();
         userWrap.setUser(Globals.getInstance().currentuser);
         qbLocation.setUser(userWrap);
         QBLocations.createLocation(qbLocation, new QBEntityCallback<QBLocation>() {
@@ -147,11 +145,7 @@ public class MainActivity extends AppCompatActivity {
             public void onError(QBResponseException errors) {
 
             }
-        }, "Somebody is near you.", QBEnvironment.DEVELOPMENT, 100);
-
-
-
-
+        }, "Somebody is near you.", QBEnvironment.DEVELOPMENT, 0.5f);
 
 
         /**
@@ -159,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
          */
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
-        mNavigationView = (NavigationView) findViewById(R.id.shitstuff) ;
+        mNavigationView = (NavigationView) findViewById(R.id.shitstuff);
 
         /**
          * Lets inflate the very first fragment
@@ -168,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
 
         mFragmentManager = getSupportFragmentManager();
         mFragmentTransaction = mFragmentManager.beginTransaction();
-        mFragmentTransaction.replace(R.id.containerView,new TabFragment()).commit();
+        mFragmentTransaction.replace(R.id.containerView, new TabFragment()).commit();
         /**
          * Setup click events on the Navigation View Items.
          */
@@ -180,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
 
                 if (menuItem.getItemId() == R.id.nav_item_inbox) {
                     FragmentTransaction xfragmentTransaction = mFragmentManager.beginTransaction();
-                    xfragmentTransaction.replace(R.id.containerView,new TabFragment()).commit();
+                    xfragmentTransaction.replace(R.id.containerView, new TabFragment()).commit();
                 }
 
                 return false;
@@ -193,13 +187,66 @@ public class MainActivity extends AppCompatActivity {
          */
 
         android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
-        ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this,mDrawerLayout, toolbar,R.string.app_name,
+        ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.app_name,
                 R.string.app_name);
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
         mDrawerToggle.syncState();
 
+//        final QBChatService chatService = QBChatService.getInstance();
+//        QBAuth.createSession(Globals.getInstance().getCurrentuser(), new QBEntityCallback<QBSession>() {
+//            @Override
+//            public void onSuccess(QBSession session, Bundle params) {
+//                // success, login to chat
+//                chatService.login(Globals.getInstance().getCurrentuser(), new QBEntityCallback() {
+//
+//
+//                    @Override
+//                    public void onSuccess(Object o, Bundle bundle) {
+//                        Toast.makeText(getApplicationContext(),"Woho",Toast.LENGTH_SHORT);
+//                    }
+//
+//                    @Override
+//                    public void onError(QBResponseException errors) {
+//                        Toast.makeText(getApplicationContext(),"Dammit",Toast.LENGTH_SHORT);
+//                    }
+//                });
+//            }
+//
+//            @Override
+//            public void onError(QBResponseException errors) {
+//                Toast.makeText(getApplicationContext(),errors.toString(),Toast.LENGTH_SHORT);
+//            }
+//        });
+
+    }
+
+    private Location getLastKnownLocation(LocationManager mLocationManager) {
+        mLocationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
+        List<String> providers = mLocationManager.getProviders(true);
+        Location bestLocation = null;
+        for (String provider : providers) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return null;
+            }
+            Location l = mLocationManager.getLastKnownLocation(provider);
+            if (l == null) {
+                continue;
+            }
+            if (bestLocation == null || l.getAccuracy() < bestLocation.getAccuracy()) {
+                // Found best last known location: %s", l);
+                bestLocation = l;
+            }
+        }
+        return bestLocation;
     }
 
 }
